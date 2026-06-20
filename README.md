@@ -31,7 +31,8 @@ graph TD
     HITL --> Decision[Process Decision]
     
     AutoApprove --> End([End Workflow])
-    Decision --> End```
+    Decision --> End
+```
     
 ## Project Structure
 
