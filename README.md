@@ -31,11 +31,10 @@ graph TD
     HITL --> Decision[Process Decision]
     
     AutoApprove --> End([End Workflow])
-    Decision --> End
+    Decision --> End```
     
 ## Project Structure
 
-```
 ambient-expense-agent/
 ├── app/         # Core agent code
 │   ├── agent.py               # Main agent logic
