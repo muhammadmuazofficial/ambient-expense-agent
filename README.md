@@ -1,8 +1,38 @@
-# ambient-expense-agent
+# 💸 Ambient Expense Approval Agent (ADK 2.0 Graph Workflow)
 
-Simple ReAct agent
-Agent generated with `agents-cli` version `0.5.0`
+An ambient, event-driven web service that automates expense report reviews, sanitizes inputs, and routes approval decisions using the new **Google Agent Development Kit (ADK 2.0) Graph Workflow API** and **FastAPI**.
+Designed to run locally or deploy directly to serverless runtimes (like Google Cloud Run), the agent processes incoming expense notifications via Google Cloud Pub/Sub push triggers
 
+## 🚀 Key Features
+*   **Graph Workflow Topology:** Built using ADK 2.0's function-node graph architecture with structured edge routing.
+*   **Intelligent Auto-Routing:**
+    *   **Under $100:** Auto-approved instantly with zero LLM costs.
+    *   **$100 or more:** Promoted to security checks, LLM evaluation, and human-in-the-loop manager approval.
+*   **Robust Security Checkpoint:**
+    *   **PII Scrubbing:** Automatically detects and redacts sensitive data (SSNs and Credit Cards) before it reaches the LLM or logs.
+    *   **Prompt Injection Defense:** Defends against malicious override attempts (e.g., instructions attempting to force auto-approval). If detected, it bypasses the LLM entirely and flags a prominent security warning to the human reviewer.
+*   **LLM Risk Assessment:** Evaluates high-value expenses using `gemini-3.1-flash-lite` to detect potential policy violations or risk factors.
+*   **Human-in-the-Loop (HITL):** Seamlessly pauses execution using ADK's `RequestInput` mechanism, waiting for manager decisions with warnings for security threats or redacted PII.
+*   **Ambient Web Service:** FastAPI web service serving on port `8080` with built-in Pub/Sub envelope normalization middleware and standard Python structured logging.
+
+## 🛠️ Architecture
+```mermaid
+graph TD
+    Start([Pub/Sub Event]) --> Parse[Parse Expense Email]
+    Parse --> Route{Amount Check}
+    
+    Route -- "< $100" --> AutoApprove[Auto Approve Node]
+    Route -- ">= $100" --> SecurityCheck[Security Checkpoint]
+    
+    SecurityCheck -- "Clean" --> LLMReview[Gemini LLM Risk Review]
+    SecurityCheck -- "Prompt Injection Detected" --> HITL[Human-in-the-Loop Approval]
+    
+    LLMReview --> HITL
+    HITL --> Decision[Process Decision]
+    
+    AutoApprove --> End([End Workflow])
+    Decision --> End
+    
 ## Project Structure
 
 ```
