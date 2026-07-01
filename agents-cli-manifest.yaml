@@ -3,10 +3,11 @@ acli_version: "0.5.0"
 agent_directory: "expense_agent"
 region: "us-east1"
 base_template: "adk"
+deployment_target: "agent_runtime"
 generated_at: "2026-06-19T12:34:55.158098+00:00"
 language: "python"
 create_params:
-  deployment_target: "none"
+  deployment_target: "agent_runtime"
   session_type: "in_memory"
   cicd_runner: "skip"
   include_data_ingestion: false

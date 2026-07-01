@@ -1,4 +1,4 @@
-.PHONY: install playground run
+.PHONY: install playground run generate-traces grade
 
 install:
 	agents-cli install
@@ -8,3 +8,9 @@ playground:
 
 run:
 	uv run python -m expense_agent.fast_api_app
+
+generate-traces:
+	uv run python tests/eval/generate_traces.py
+
+grade:
+	uv run python tests/eval/grade_traces.py
